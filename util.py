@@ -2,11 +2,10 @@ import pandas as pd
 import random as rand
 import numpy as np
 
-def create_bagged_predictor(train_csv_path, response_var, train_model_fn, p, verbose=False, seed=35901):
+def create_bagged_predictor(train_x, train_y, train_model_fn, p, verbose=False, seed=35901):
     """
     Returns predictor_fn(X), a bagged predictor function. Requires the following inputs:
-        * train_csv_path: relative path to a csv file containing the training data.
-                          First row should be feature names
+        * train_x, train_y: pandas DataFrames
         * response_var: the name of the response variable (as it appears in the training data csv file)
         * train_model_fn: a function for training the model. Should be created using create_train_model_fn
         * p : number of features bootstrapped samples should choose
@@ -20,7 +19,8 @@ def create_bagged_predictor(train_csv_path, response_var, train_model_fn, p, ver
     p = p                       # number of features per bootstrap sample
 
     # Preliminaries
-    train_data = pd.read_csv(train_csv_path, header=0)
+    train_data = train_x
+    response_var = train_y.columns[0]
     features = [x for x in train_data if x != response_var]
     if(verbose): print("features: " + ", ".join(features))
 
