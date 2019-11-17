@@ -32,7 +32,7 @@ def create_bagged_predictor(train_x, train_y, train_model_fn, p, verbose=False, 
     Models = []
     for i in range(B):
         data = boot_data_sets[i]
-        feats = boot_featsets[i]
+        feats = boot_feat_sets[i]
         Models.append(train_model_fn(data[feats], data[response_var])) 
 
     # Create and return predictor function which bags these models
