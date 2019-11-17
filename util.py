@@ -20,7 +20,7 @@ def create_bagged_predictor(train_x, train_y, train_model_fn, p, verbose=False, 
 
     # Preliminaries
     train_data = train_x
-    response_var = train_y.columns[0]
+    response_var = train_y.name
     features = [x for x in train_data if x != response_var]
     if(verbose): print("features: " + ", ".join(features))
 

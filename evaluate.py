@@ -7,7 +7,7 @@ def evaluate_bagged_model(train_x, train_y, test_x, test_y, model, model_param, 
     predictor_fn = create_bagged_predictor(train_x, train_y, train_model_fn, p, verbose, seed)
 
     test_data = test_x
-    response_var = test_y.columns[0]
+    response_var = test_y.name
     features = [x for x in test_data.columns if x != response_var]
     classes = np.unique(train_y.values)
     n_t = test_data.shape[0]
