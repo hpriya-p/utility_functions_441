@@ -3,6 +3,14 @@ import random as rand
 import numpy as np
 
 def create_bagged_predictor(train_csv_path, response_var, train_model_fn, p, verbose=False, seed=35901):
+    """
+    Returns predictor_fn(X), a bagged predictor function. Requires the following inputs:
+        * train_csv_path: relative path to a csv file containing the training data.
+                          First row should be feature names
+        * response_var: the name of the response variable (as it appears in the training data csv file)
+        * train_model_fn: a function for training the model. Should be created using create_train_model_fn
+        * p : number of features bootstrapped samples should choose
+    """
     #first row of csv should be feature names
     rand.seed(seed)
    
@@ -25,7 +33,7 @@ def create_bagged_predictor(train_csv_path, response_var, train_model_fn, p, ver
     for i in range(B):
         data = boot_data_sets[i]
         feats = boot_featsets[i]
-        Models.append(train_model_fn(data[feats], data[response_var])) #HP note: not sure if training will return a model obj.
+        Models.append(train_model_fn(data[feats], data[response_var])) 
 
     # Create and return predictor function which bags these models
     def predictor_fn(X):
@@ -41,4 +49,17 @@ def create_bagged_predictor(train_csv_path, response_var, train_model_fn, p, ver
 
     return predictor_fn
 
-def create_train_model_fn
+
+
+def create_train_model_fn(model_obj, params_dict):
+    """
+    Given a Scikit-learn model object and a dictionary of parameters + values,
+    returns a train_model_fn which can be provided as input to create_bagged_predictor
+    """
+
+    def train_model_fn(X, y):
+        model_obj.set_params(params_dict)
+        model_obj.fit(X, y)
+        return model_obj
+    return train_model_fn
+
