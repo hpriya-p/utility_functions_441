@@ -7,13 +7,14 @@ def class_prob_avg_fn(class_probabilities):
     return [np.mean([x[i] for x in class_probabilities]) for i in range(K)]
 def evaluate_bagged_model(train_x, train_y, test_x, test_y, model, model_param, p, prob_aggr_fn=class_prob_avg_fn, verbose=False, seed=35901):
     train_model_fn = create_train_model_fn(model, model_param)
-    predictor_fn, predictor_svm = create_bagged_predictor(train_x, train_y, train_model_fn, p, verbose, seed)
+    predictor_fn = create_bagged_predictor(train_x, train_y, train_model_fn, p, verbose, seed)
+
     test_data = pd.concat([test_x, test_y], axis=1)
     response_var = test_y.name
     features = [x for x in test_data.columns if x != response_var]
     classes = np.unique(train_y.values)
     n_t = test_data.shape[0]
-    predicted_probs = [predictor_svm.predict(predictor_fn(test_data.iloc[i], None)) for i in range(n_t)]
+    predicted_probs = [predictor_fn(test_data.iloc[i], prob_aggr_fn) for i in range(n_t)]
     predictions = [np.argmax(predicted_probs[i]) for i in range(n_t)]
     num_correct = sum([1 if classes[predictions[i]] == test_data[response_var].iloc[i] else 0 for i in range(n_t)])
     return num_correct, n_t, predicted_probs, predictions
