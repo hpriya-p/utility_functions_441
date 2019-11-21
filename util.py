@@ -2,6 +2,7 @@ import pandas as pd
 import random as rand
 import numpy as np
 
+from sklearn.svm import SVC
 def create_bagged_predictor(train_x, train_y, train_model_fn, p, verbose=False, seed=35901):
     """
     Returns predictor_fn(X), a bagged predictor function. Requires the following inputs:
@@ -35,15 +36,21 @@ def create_bagged_predictor(train_x, train_y, train_model_fn, p, verbose=False, 
         feats = boot_feat_sets[i]
         Models.append(train_model_fn(data[feats], data[response_var])) 
 
-    # Create and return predictor function which bags these models
+    # Create predictor function which bags these models
     def predictor_fn(X, prob_aggr_fn = np.mean):
         probabilities = []
         for i in range(B):
             probabilities.append(list(Models[i].predict_proba(X[boot_feat_sets[i]].values.reshape(1, -1))[0]))
 
+        if(prob_aggr_fn == None):
+            return probabilities
         return prob_aggr_fn(probabilities)
 
-    return predictor_fn
+    top_level_model = SVC()
+    top_level_model.fit(predictor_fn(train_x), train_y)
+    
+     
+    return predictor_fn, top_level_model
 
 
 
