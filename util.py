@@ -41,7 +41,7 @@ def create_bagged_predictor(train_x, train_y, train_model_fn, p, verbose=False, 
     def predictor_fn(X, prob_aggr_fn = np.mean):
         probabilities = []
         for i in range(B):
-            probabilities.append(list(Models[i].predict_proba(X[boot_feat_sets[i]].values.reshape(1, -1))[0]))
+            probabilities.append(list(Models[i].predict_proba(X[boot_feat_sets[i]].values)[0]))
 
         return prob_aggr_fn(probabilities)
 
