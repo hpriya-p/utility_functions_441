@@ -7,6 +7,7 @@ def class_prob_avg_fn(class_probabilities):
     return [np.mean([x[i] for x in class_probabilities]) for i in range(K)]
 
 def class_majority_vote(class_probabilities):
+    print(class_probabilities)
     K = len(class_probabilities[0])
     votes = [np.argmax(pr) for pr in class_probabilities]
     num_votes_per_class = [len([i for i in votes if i == v]) for v in range(K)]
