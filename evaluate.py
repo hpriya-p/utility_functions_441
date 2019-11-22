@@ -5,6 +5,13 @@ from util import create_bagged_predictor, create_train_model_fn
 def class_prob_avg_fn(class_probabilities):
     K = len(class_probabilities[0])
     return [np.mean([x[i] for x in class_probabilities]) for i in range(K)]
+
+def class_majority_vote(class_probabilities):
+    K = len(class_probabilities[0])
+    votes = [np.argmax(pr) for pr in class_probabilities]
+    num_votes_per_class = [len([i if i == v for i in votes]) for v in range(K)]
+    return [1 if i == np.argmax(num_votes_per_class) else 0 for i in range(K)]
+
 def evaluate_bagged_model(train_x, train_y, test_x, test_y, model, model_param, p, prob_aggr_fn=class_prob_avg_fn, verbose=False, seed=35901):
     train_model_fn = create_train_model_fn(model, model_param)
     predictor_fn = create_bagged_predictor(train_x, train_y, train_model_fn, p, verbose, seed)
