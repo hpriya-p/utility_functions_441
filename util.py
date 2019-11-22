@@ -14,7 +14,8 @@ def create_bagged_predictor(train_x, train_y, train_model_fn, p, verbose=False, 
     rand.seed(seed)
    
     # CONSTANTS
-    n = train_x.shape[0]        # sample size 
+    n = train_x.shape[0]        # sample size
+    print(n)
     B = 50                      # number of bootstrap samples
     p = p                       # number of features per bootstrap sample
 
@@ -25,6 +26,7 @@ def create_bagged_predictor(train_x, train_y, train_model_fn, p, verbose=False, 
     if(verbose): print("features: " + ", ".join(features))
 
     # Create Bootstrap Samples
+
     boot_data_sets = [rand.choices(train_data.index, k=n) for __ in range(B)]
     boot_feat_sets = [rand.sample(features, p) for __ in range(B)]
 
