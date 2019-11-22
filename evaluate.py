@@ -15,7 +15,7 @@ def class_majority_vote(class_probabilities):
 
 def evaluate_bagged_model(train_x, train_y, test_x, test_y, model, model_param, p, prob_aggr_fn=class_prob_avg_fn, verbose=False, seed=35901):
     train_model_fn = create_train_model_fn(model, model_param)
-    predictor_fn = create_bagged_predictor(train_x, train_y, train_model_fn, p, verbose, seed)
+    predictor_fn, models = create_bagged_predictor(train_x, train_y, train_model_fn, p, verbose, seed)
 
     test_data = pd.concat([test_x, test_y], axis=1)
     response_var = test_y.name
@@ -25,6 +25,6 @@ def evaluate_bagged_model(train_x, train_y, test_x, test_y, model, model_param, 
     predicted_probs = [predictor_fn(test_data.iloc[i], prob_aggr_fn) for i in range(n_t)]
     predictions = [classes[np.argmax(predicted_probs[i])] for i in range(n_t)]
     num_correct = sum([1 if predictions[i] == test_data[response_var].iloc[i] else 0 for i in range(n_t)])
-    return num_correct, n_t, predicted_probs, predictions
+    return num_correct, n_t, predicted_probs, predictions, models
     
     

@@ -45,7 +45,7 @@ def create_bagged_predictor(train_x, train_y, train_model_fn, p, verbose=False, 
 
         return prob_aggr_fn(probabilities)
 
-    return predictor_fn
+    return predictor_fn, Models
 
 
 
