@@ -16,7 +16,7 @@ def evaluate_bagged_model(train_x, train_y, test_x, test_y, model, model_param, 
     n_t = test_data.shape[0]
     predicted_probs = [predictor_fn(test_data.iloc[i], prob_aggr_fn) for i in range(n_t)]
     predictions = [classes[np.argmax(predicted_probs[i])] for i in range(n_t)]
-    num_correct = sum([1 if classes[predictions[i]] == test_data[response_var].iloc[i] else 0 for i in range(n_t)])
+    num_correct = sum([1 if predictions[i] == test_data[response_var].iloc[i] else 0 for i in range(n_t)])
     return num_correct, n_t, predicted_probs, predictions
     
     
