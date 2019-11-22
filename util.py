@@ -27,7 +27,7 @@ def create_bagged_predictor(train_x, train_y, train_model_fn, p, verbose=False, 
 
     # Create Bootstrap Samples
 
-    boot_data_sets = [rand.choices(train_data.index, k=n) for __ in range(B)]
+    boot_data_sets = [rand.choices(train_data.index, k=2*n) for __ in range(B)]
     boot_feat_sets = [rand.sample(features, p) for __ in range(B)]
 
     # Train models on bootstrapped data/feature sets
