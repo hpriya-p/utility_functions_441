@@ -2,6 +2,7 @@ import pandas as pd
 import random as rand
 import numpy as np
 from copy import deepcopy
+from scipy.stats import mode
 def create_bagged_predictor(train_x, train_y, model, model_params, p, seed=35901):
     """
     Returns predictor_fn(X), a bagged predictor function. Requires the following inputs:
@@ -50,15 +51,18 @@ def create_bagged_predictor(train_x, train_y, model, model_params, p, seed=35901
         if(models_to_consider == 'all'):
             models_to_consider = range(B)
 
-        
-        votes = [[Models[i].predict(X[j,]) for i in models_to_consider] for j in range(X.shape[0])]
-        return [mode(v) for v in votes]
+        df = pd.DataFrame(X)
+        pred = []
+        for __, row in df.iterrows():
+            pred.append(mode([Models[i].predict(row.values.reshape(1, -1)) for i in models_to_consider]))
+
+        return [x[0][0] for x in pred], [x[1][0] for x in pred]
 
 
     return predictor_fn, Models, not_seen, seen_data
 
 
-
+"""
 def mode(lst_of_votes):
     #tie breaking: smaller class index
     frequencies = dict()
@@ -69,4 +73,4 @@ def mode(lst_of_votes):
         else:
             frequencies[v] += 1
     return max(frequencies, key=lambda key: frequencies[key])
-
+"""
