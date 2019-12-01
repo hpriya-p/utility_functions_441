@@ -51,7 +51,7 @@ def create_bagged_predictor(train_x, train_y, model, model_params, p, seed=35901
             models_to_consider = range(B)
 
         
-        votes = [[Models[i].predict(x) for i in models_to_consider] for x in X]
+        votes = [[Models[i].predict(x.reshape(1, -1)) for i in models_to_consider] for x in X]
         return [mode(v) for v in votes]
 
 
