@@ -55,7 +55,6 @@ def create_bagged_predictor(train_x, train_y, model, model_params, p, seed=35901
         pred = []
         for __, row in df.iterrows():
             model_votes = [Models[i].predict(row.values.reshape(1, -1))[0] for i in models_to_consider]
-            print(model_votes)
             pred.append(mode(model_votes))
 
         return [x[0][0] for x in pred], [x[1][0] for x in pred]
