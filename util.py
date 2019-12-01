@@ -15,7 +15,7 @@ def create_bagged_predictor(train_x, train_y, model, model_params, p, seed=35901
     rand.seed(seed)
    
     # CONSTANTS
-    n = train_x.shape[0]/2        # sample size
+    n = int(train_x.shape[0]/2)        # sample size
     B = 50                      # number of bootstrap samples
     p = p                       # number of features per bootstrap sample
 
