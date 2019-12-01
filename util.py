@@ -2,7 +2,6 @@ import pandas as pd
 import random as rand
 import numpy as np
 from copy import deepcopy
-
 def create_bagged_predictor(train_x, train_y, model, model_params, p, seed=35901):
     """
     Returns predictor_fn(X), a bagged predictor function. Requires the following inputs:
@@ -51,8 +50,8 @@ def create_bagged_predictor(train_x, train_y, model, model_params, p, seed=35901
         if(models_to_consider == 'all'):
             models_to_consider = range(B)
 
-        votes = [Models[i].predict(X) for i in models_to_consider]
         
+        votes = [[Models[i].predict(x) for i in models_to_consider] for x in X]
         return [mode(v) for v in votes]
 
 
