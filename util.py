@@ -52,8 +52,8 @@ def create_bagged_predictor(train_x, train_y, model, model_params, p, seed=35901
             models_to_consider = range(B)
 
         votes = [Models[i].predict(X) for i in models_to_consider]
-        print(votes)
-        return mode(votes)
+        
+        return [mode(v) for v in votes]
 
 
     return predictor_fn, Models, not_seen, seen_data
